@@ -2,8 +2,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main Menu</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Card types</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../dist/jquery-confirm.min.js"></script>
     <script src="../dist/bootstrap.min.js"></script>
@@ -39,7 +39,7 @@
                     }
                 })
             })
-            $('.row').click(function (){
+            $('.rowt').click(function (){
                 let citi_row = $(this).data("row");
                 $.confirm({
                     useBootstrap: false,
@@ -81,27 +81,40 @@ $database = "test";
 $mysqli = new mysqli($hostname, $username, $password, $database);
 $query = "SELECT * FROM `card type`";
 
-
-echo '<table class="main"> 
+echo '
+<div class="container">
+<div class="row">
+<div class="col-3"></div>
+<div class="col-6">
+<div class="row">
+<input type="text" class="citizenship" id="citizenship">
+<input class="citi" id="citi" type="submit" value="Save data">
+</div>
+<div class="row">
+<table class="table"> 
       <tr> 
           <td>Card type ID</font> </td> 
           <td>Card type</font> </td> 
-      </tr>';
+      </tr>
+';
 
 if ($result = $mysqli->query($query)) {
     while ($row = $result->fetch_assoc()) {
         $field1name = $row["ID_type"];
         $field2name = $row["Name_type"];
 
-        echo '<tr class="row" data-row='.$field1name.'> 
+        echo '<tr class="rowt" data-row='.$field1name.'> 
                   <td>'.$field1name.'</td>
                   <td>'.$field2name.'</td>
               </tr>';
     }
+    echo '</table>
+<div class="col-3"></div>
+</div>
+</div>
+</div>';
     $result->free();
 }
-echo '<input type="text" class="citizenship" id="citizenship">
-      <input class="citi" id="citi" type="submit" value="Save data">
-    ';
+
 ?>
 </body>

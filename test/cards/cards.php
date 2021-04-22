@@ -2,8 +2,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main Menu</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Cards</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../dist/jquery-confirm.min.js"></script>
     <script src="../dist/bootstrap.min.js"></script>
@@ -22,7 +22,7 @@
                 document.getElementById('issue_date_field').checked = false;
                 document.getElementById('issued_by_whom_field').checked = false;
             })
-            $('.row').click(function (){
+            $('.rowt').click(function (){
                 document.getElementById('submit_field').value = "Delete";
                 let fio = $(this).data("row");
                 $.ajax({
@@ -32,7 +32,7 @@
                         'fio':fio,
                     },
                     success: function(data) {
-                        let test = data.split(' ');
+                        let test = data.split('  ');
                         document.getElementById('client_id_field').value = test[3];
                         document.getElementById('fio_field').value = test[1];
                         document.getElementById('gender_field').value = test[0];
@@ -43,6 +43,7 @@
                         document.getElementById('id_field').value = test[7];
                         document.getElementById('issue_date_field').checked = test[8] == 1;
                         document.getElementById('issued_by_whom_field').checked = test[9] == 1;
+                        document.getElementById('date_field').value = test[10];
                     }
                 });
             })
@@ -67,6 +68,7 @@
                                     let id = document.getElementById('id_field').value;
                                     let issue_date = document.getElementById('issue_date_field').checked;
                                     let issued_by_whom = document.getElementById('issued_by_whom_field').checked;
+                                    let date = document.getElementById('date_field').value;
                                     $.ajax({
                                         url: 'add-card.php',
                                         method: 'POST',
@@ -80,7 +82,8 @@
                                             'series':series,
                                             'id':id,
                                             'issue_date':issue_date,
-                                            'issued_by_whom':issued_by_whom
+                                            'issued_by_whom':issued_by_whom,
+                                            'date':date
                                         }
                                     });
                                     location.reload();
@@ -135,75 +138,141 @@ $username = "root";
 $password = "";
 $database = "test";
 $mysqli = new mysqli($hostname, $username, $password, $database);
+
+
+
+echo '
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+<table class=""> 
+        <tr> 
+            <td>Card number</td> 
+        </tr>
+        <tr> 
+            <td class="add_client btn btn-success">Add</td>
+        </tr>';
 $query = "SELECT * FROM card";
-
-
-echo '<table class="main left_block"> 
-      <tr> 
-          <td>Card number</td> 
-          <td>Full name</td> 
-      </tr>
-      <tr> 
-          <td class="add_client">Add</td> 
-      </tr>';
-
 if ($result = $mysqli->query($query)) {
     while ($row = $result->fetch_assoc()) {
         $field1name = $row["ID"];
         $field2name = $row["ID_client"];
 
-        echo '<tr id="che" class="row" data-row='.$field1name.'>
-                  <td>'.$field1name.'</td>
-                  <td>'.$field2name.'</td>
-              </tr>';
+        echo '<tr>
+                  <td data-row='.$field1name.' id="che" class="rowt btn btn-success">'.$field1name.'</td>
+            </tr>';
     }
     $result->free();
 }
 echo '
-<div class="right_block">
-    <div class="rowtt">
-        <span class="span_test">Client Full name:</span>
-        <input class="input_test" type="text" id="client_id_field">
+</table>
+</div>
+<div class="col-md-8">
+    <div class="row">
+        <span class="col-4">Client Full name:</span>
+        <select class="col-8" id="client_id_field">
+        <option value="" selected disabled hidden>Choose here</option>';
+$query = "SELECT * FROM clients";
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $cur = $row["Full_name"];
+        echo '<option value=' . $row["ID_client"]. " " .$row["Full_name"] . '>' . $cur . '</option>';
+    }
+}
+$result->free();
+echo '
+    </select>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Valid thru:</span>
-    <input class="input_test" type="date" id="fio_field">
+    <div class="row">
+    <span class="col-4">Valid thru:</span>
+    <input class="col-8" type="date" id="fio_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Card number:</span>
-    <input class="input_test" type="text" id="gender_field">
+    <div class="row">
+    <span class="col-4">Card number:</span>
+    <input class="col-8" type="text" id="gender_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Card type:</span>
-    <input class="input_test" type="text" id="birth_place_field">
+    <div class="row">
+    <span class="col-4">Card type:</span>
+    <select class="col-8" id="birth_place_field">
+    <option value="" selected disabled hidden>Choose here</option>';
+$query = "SELECT * FROM `card type`";
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $cur = $row["Name_type"];
+        echo '<option value=' . $row["ID_type"]. " " .$row["Name_type"] . '>' . $cur . '</option>';
+    }
+}
+$result->free();
+echo '
+    </select>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Currency:</span>
-    <input class="input_test" type="text" id="citizenship_field">
+    <div class="row">
+    <span class="col-4">Currency:</span>
+    <select class="col-8" id="citizenship_field">
+    <option value="" selected disabled hidden>Choose here</option>';
+$query = "SELECT * FROM currency";
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $cur = $row["Currency"];
+        echo '<option value=' . $row["ID_cur"]. " " .$row["Currency"] . '>' . $cur . '</option>';
+    }
+}
+$result->free();
+    echo '
+    </select>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Payment system:</span>
-    <input class="input_test" type="text" id="social_status_field">
+    <div class="row">
+    <span class="col-4">Payment system:</span>
+    <select class="col-8" id="social_status_field">
+    <option value="" selected disabled hidden>Choose here</option>';
+$query = "SELECT * FROM `payment system`";
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $cur = $row["Name_sys"];
+        echo '<option value=' . $row["ID_sys"]. " " .$row["Name_sys"] . '>' . $cur . '</option>';
+    }
+}
+$result->free();
+echo '
+        </select>
+        </div>
+        <div class="row">
+            <span class="col-4">Additional service:</span>
+            <select class="col-8" id="series_field">
+                <option value="" selected disabled hidden>Choose here</option>';
+$query = "SELECT * FROM `additional services`";
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $cur = $row["Name_service"];
+        echo '<option value=' . $row["ID_service"]. " " .$row["Name_service"] . '>' . $cur . '</option>';
+    }
+}
+$result->free();
+echo '
+            </select>
+        </div>
+        <div class="row">
+        <span class="col-4">PIN:</span>
+        <input class="col-8" type="text" id="id_field">
+        </div>
+        <div class="row">
+        <span class="col-4">Send to processing:</span>
+        <input class="" type="checkbox" id="issue_date_field">
+        </div>
+        <div class="row">
+        <span class="col-4">Given:</span>
+        <input class="" type="checkbox" id="issued_by_whom_field">
+        </div>
+        <div class="row">
+        <span class="col-4">Date of apply:</span>
+        <input class="col-8" type="date" id="date_field">
+        </div>
+        <div class="row">
+        <input class="col-4 submit_test btn btn-primary" type="submit" id="submit_field" value="Save">
+        </div>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Additional service:</span>
-    <input class="input_test" type="text" id="series_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">PIN:</span>
-    <input class="input_test" type="text" id="id_field">
-    </div>
-    <div class="rowtt">
-    <span class="span_test">Send to proccesing:</span>
-    <input class="input_test" type="checkbox" id="issue_date_field">
-    </div>
-    <div class="rowtt">
-    <span class="span_test">Given:</span>
-    <input class="input_test" type="checkbox" id="issued_by_whom_field">
-    </div>
-    <div class="rowtt">
-    <input class="submit_test" type="submit" id="submit_field" value="Save">
-    </div>
-</div>'
+</div>
+</body>';
 ?>
-</body>
+

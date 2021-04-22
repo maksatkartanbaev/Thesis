@@ -29,7 +29,7 @@ if ($_POST['issued_by_whom'] == 'true'){
 else{
     $issued_by = 0;
 }
-$today = date('Y/m/d');
+$today = $_POST['date'];
 
 $sql = "INSERT INTO card(id, valid_thru, id_service, id_client, id_cur, id_sys, id_type, pin, proccessing, given, date) VALUES ('$gender','$fio','$series','$client','$citizen','$social','$place','$id','$issue_date','$issued_by','$today')";
 

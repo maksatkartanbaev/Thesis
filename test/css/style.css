@@ -112,3 +112,14 @@ header{
     width: 10%;
     margin-top: -1px;
 }
+select{
+    width: 200px;
+}
+/*.row:hover{*/
+/*    background-color: black;*/
+/*    color:white;*/
+/*}*/
+/*.add_client:hover{*/
+/*    background-color: black;*/
+/*    color:white;*/
+/*}*/

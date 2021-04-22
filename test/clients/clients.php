@@ -2,8 +2,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Main Menu</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Clients</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../dist/jquery-confirm.min.js"></script>
     <script src="../dist/bootstrap.min.js"></script>
@@ -28,7 +28,7 @@
                 document.getElementById('home_field').value = "";
                 document.getElementById('mobile_field').value = "";
             })
-            $('.row').click(function (){
+            $('.rowt').click(function (){
                 document.getElementById('submit_field').value = "Delete";
                 let fio = $(this).data("row");
                 $.ajax({
@@ -38,7 +38,7 @@
                         'fio':fio,
                     },
                     success: function(data) {
-                        let test = data.split(' ');
+                        let test = data.split('  ');
                         document.getElementById('client_id_field').value = test[0];
                         document.getElementById('fio_field').value = test[1];
                         document.getElementById('gender_field').value = test[2];
@@ -160,96 +160,130 @@ $mysqli = new mysqli($hostname, $username, $password, $database);
 $query = "SELECT * FROM clients";
 
 
-echo '<table class="main left_block"> 
+echo '
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+<table class=""> 
       <tr> 
           <td>Full name</td> 
       </tr>
       <tr> 
-          <td class="add_client">Add</td> 
+          <td class="add_client btn btn-success">Add</td> 
       </tr>';
 
 if ($result = $mysqli->query($query)) {
     while ($row = $result->fetch_assoc()) {
+        $field2name = $row["ID_client"];
         $field1name = $row["Full_name"];
 
-        echo '<tr id="che" class="row" data-row='.$field1name.'>
+        echo '<tr id="che" class="rowt btn btn-success" data-row='.$field2name.'>
                   <td>'.$field1name.'</td>
               </tr>';
     }
     $result->free();
 }
 echo '
-<div class="right_block">
-    <div class="rowtt">
-        <span class="span_test">Client ID:</span>
-        <span class="input_test" type="text" id="client_id_field"></span>
+</table>
+</div>
+<div class="col-md-8">
+    <div class="row">
+        <span class="col-4">Client ID:</span>
+        <span class="col-8" type="text" id="client_id_field"></span>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Full name:</span>
-    <input class="input_test" type="text" id="fio_field">
+    <div class="row">
+    <span class="col-4">Full name:</span>
+    <input class="col-8" type="text" id="fio_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Gender:</span>
-    <input class="input_test" type="text" id="gender_field">
+    <div class="row">
+    <span class="col-4">Gender:</span>
+    <select class="col-8" id="gender_field">
+    <option value="" selected disabled hidden>Choose here</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    </select>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Birth place:</span>
-    <input class="input_test" type="text" id="birth_place_field">
+    <div class="row">
+    <span class="col-4">Birth place:</span>
+    <input class="col-8" type="text" id="birth_place_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Citizenship:</span>
-    <input class="input_test" type="text" id="citizenship_field">
+    <div class="row">
+    <span class="col-4">Citizenship:</span>
+    <select class="col-8" id="citizenship_field">
+    <option value="" selected disabled hidden>Choose here</option>';
+$query = "SELECT * FROM citizenship";
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $cur = $row["Name_country"];
+        echo '<option value=' . $row["ID_country"]. " " .$row["Name_country"] . '>' . $cur . '</option>';
+    }
+}
+$result->free();
+echo '
+    </select>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Social status:</span>
-    <input class="input_test" type="text" id="social_status_field">
+    <div class="row">
+    <span class="col-4">Social status:</span>
+    <select class="col-8" id="social_status_field">
+    <option value="" selected disabled hidden>Choose here</option>';
+$query = "SELECT * FROM `social status`";
+if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $cur = $row["Name_stat"];
+        echo '<option value=' . $row["ID_status"]. " " .$row["Name_stat"] . '>' . $cur . '</option>';
+    }
+}
+$result->free();
+echo '
+    </select>
     </div>
-    <div class="rowtt">
+    <div class="row">
     <span>Passport info</span>
     </div>
-    <div class="rowtt">
-    <span class="span_test">Series:</span>
-    <input class="input_test" type="text" id="series_field">
+    <div class="row">
+    <span class="col-4">Series:</span>
+    <input class="col-8" type="text" id="series_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">ID:</span>
-    <input class="input_test" type="text" id="id_field">
+    <div class="row">
+    <span class="col-4">ID:</span>
+    <input class="col-8" type="text" id="id_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Issue date:</span>
-    <input class="input_test" type="date" id="issue_date_field">
+    <div class="row">
+    <span class="col-4">Issue date:</span>
+    <input class="col-8" type="date" id="issue_date_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Issued by whom:</span>
-    <input class="input_test" type="text" id="issued_by_whom_field">
+    <div class="row">
+    <span class="col-4">Issued by whom:</span>
+    <input class="col-8" type="text" id="issued_by_whom_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Department code:</span>
-    <input class="input_test" type="text" id="department_field">
+    <div class="row">
+    <span class="col-4">Department code:</span>
+    <input class="col-8" type="text" id="department_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Index:</span>
-    <input class="input_test" type="text" id="index_field">
+    <div class="row">
+    <span class="col-4">Index:</span>
+    <input class="col-8" type="text" id="index_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">E-mail:</span>
-    <input class="input_test" type="text" id="email_field">
+    <div class="row">
+    <span class="col-4">E-mail:</span>
+    <input class="col-8" type="text" id="email_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Address:</span>
-    <input class="input_test" type="text" id="address_field">
+    <div class="row">
+    <span class="col-4">Address:</span>
+    <input class="col-8" type="text" id="address_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Home phone:</span>
-    <input class="input_test" type="text" id="home_field">
+    <div class="row">
+    <span class="col-4">Home phone:</span>
+    <input class="col-8" type="text" id="home_field">
     </div>
-    <div class="rowtt">
-    <span class="span_test">Mobile phone:</span>
-    <input class="input_test" type="text" id="mobile_field">
+    <div class="row">
+    <span class="col-4">Mobile phone:</span>
+    <input class="col-8" type="text" id="mobile_field">
     </div>
-    <div class="rowtt">
-    <input class="submit_test" type="submit" id="submit_field" value="Save">
+    <div class="row">
+    <input class="submit_test col-4 btn btn-primary" type="submit" id="submit_field" value="Save">
     </div>
-</div>'
+</div>
+</body>';
 ?>
-</body>
+

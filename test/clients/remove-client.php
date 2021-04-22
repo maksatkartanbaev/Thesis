@@ -12,7 +12,7 @@ if (!$conn){
 
 $citi_row = $_POST['citi_row'];
 
-$sql = "DELETE FROM clients WHERE Full_name='$citi_row'";
+$sql = "DELETE FROM clients WHERE ID_client='$citi_row'";
 
 if ($conn->query($sql) === TRUE) {
     echo "Added successfully";
