@@ -5,8 +5,19 @@
     <title>Bills</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="../dist/jquery-confirm.min.js"></script>
-    <script src="../dist/bootstrap.min.js"></script>
+    <script src="./dist/jquery-confirm.min.js"></script>
+    <script src="./dist/bootstrap.min.js"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            $('.submit_to').click(function(){
+                var divToPrint = document.getElementById('divToPrint');
+                var popupWin = window.open('', '_blank');
+                popupWin.document.open();
+                popupWin.document.write('<body onload="window.print()">' + divToPrint.innerHTML);
+                popupWin.document.close();
+            })
+        });
+     </script>
 </head>
 <body>
 <?php
@@ -20,7 +31,7 @@ echo'
 <div class="container">
 <div class="row">
 <div class="col-2"></div>
-<div class="col-8">
+<div class="col-8" id="divToPrint">
 <table class="table"> 
       <tr> 
           <td>Card number</font> </td> 
@@ -59,6 +70,12 @@ if ($result = $mysqli->query($query)) {
 </table>
 </div>
 <div class="col-2"></div>
+</div>
+<div class="row">
+    <div class="col-8"></div>
+    <div class="col-4">
+    <input type="submit" class="submit_to" id="submit_to" value="Print">
+    </div>
 </div>
 </div>
 </body>
