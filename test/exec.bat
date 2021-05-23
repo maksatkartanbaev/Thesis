@@ -1,1 +1,1 @@
-docker run --name xampp -p 2222:22 -p 8080:80 -d -v ${PWD}:/www iggyblob/docker-xampp
+docker run --name xampp -p 8080:80 -d -v ${PWD}:/www iggyblob/docker-xampp
